@@ -1,4 +1,9 @@
 $(function() {
+	$('head').find('script').each(function(){
+		if($(this).attr('src')=='https://my.freenom.com/includes/domains/fn-available.js') {
+			(this).remove();
+		}
+	});
     var $domainstring = '';
     var $max_results_shown = 20;
     var $check_pending = [];
