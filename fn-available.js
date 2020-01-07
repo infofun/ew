@@ -24,10 +24,9 @@ $(function() {
 
         // do an availability test - AJAX
         $.ajax({
-            url:    "https://my.freenom.com/includes/domains/fn-available.php",
+            url:    "http://127.0.0.1/fn-available.php",
             type:   'post',
             data:   { domain: $domain, tld: $tld },
-            crossDomain: true,
             beforeSend: function(xhr) {
                 xhr.withCredentials = true;
             },
