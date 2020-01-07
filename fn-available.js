@@ -1,7 +1,7 @@
 $(function() {
 	$('head').find('script').each(function(){
 		if($(this).attr('src')=='https://my.freenom.com/includes/domains/fn-available.js') {
-			(this).remove();
+			$(this).remove();
 		}
 	});
     var $domainstring = '';
