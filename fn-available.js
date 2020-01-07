@@ -1,143 +1,11 @@
 $(function() {
-	$('head').find('script').each(function(){
-		if($(this).attr('src')=='https://my.freenom.com/includes/domains/fn-available.js') {
-			$(this).remove();
-		}
-	});
-	
-	var $domain2='xyz.ko';
-var $tld2='tk';
-
-	$.ajax({
-                        url:    "https://my.freenom.com/includes/domains/fn-additional.php",
-                        type:   'post',
-                        data:   { domain: $domain2, tld: $tld2 },
-                        crossDomain: true,
-                        beforeSend: function(xhr) {
-                            xhr.withCredentials = true;
-                        },
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function($data, $status) {
-                            if ($data.available) {
-                                updateCartCount(1);
-                            }
-                        },
-                    });
-	
     var $domainstring = '';
     var $max_results_shown = 20;
     var $check_pending = [];
-    var $lookup_pending = 0;
-    var $maximum_in_cart = 0;
-
-    $(".addToCart").click(function(e) {
-        if ($check_pending.length > 0) {
-
-            // we could wait for a bit to check it again.
-            e.preventDefault();
-
-            // trigger another click in 100ms
-            setTimeout(function(){ $(".addToCart").trigger("click") }, 200);
-        }
-    });
-
-    $("#slider").on("slidechange", function( event, ui ) {
-        // value of slider
-        var $value = $(this).slider("value");
-        var $max_chars = $domainstring.length + 3;
-        if ($value > 0) {
-            $max_chars += ($value / 5);
-        }
-        $("#max_chars").text($max_chars);
-
-        // get value of checkbox too
-        var $checked = $("#locations").prop("checked");
-
-        var $max = $("#countResults").text();
-        var $count = 0;
-
-        $(".paid_rows").each(function() {
-            $tld = $(this).find(".domainExtension").text();
-            $loctld = $(this).attr("location");
-
-            if ($tld.length > ($max_chars - $domainstring.length)) {
-                $(this).hide();
-            } else if ( $loctld == "false" && $checked ) {
-                $(this).hide();
-            } else {
-                $(this).show();
-                $count++;
-            }
-            if ($count > $max) {
-                $(this).hide();
-                $count--;
-            }
-        });
-        if ($count > $max_results_shown) {
-            $max_results_shown = $count;
-        }
-        $("#countResults").text($count);
-    });
-
-    $("#locations").change(function() {
-        var $checkbox = $(this).find(":checkbox");
-        var $checked = $(this).prop("checked");
-        $checkbox.prop("checked", !$checked);
-        $("#countResults").text($max_results_shown);
-        $("#slider").trigger("slidechange");
-    });
-
-    $("#domainForm").submit(function() {
-        $("#submitBtn").trigger("click");
-        return false;
-    });
-    $("#domainForm2").submit(function() {
-        // override other inputs with latest domain
-        var $domainname = $(this).parent().find("[name='domainname']").val();
-        $("[name='domainname']").val($domainname);
-        $("#submitBtn").trigger("click");
-        return false;
-    });
-    $("#domainForm3").submit(function() {
-        // override other inputs with latest domain
-        var $domainname = $(this).parent().find("[name='domainname']").val();
-        $("[name='domainname']").val($domainname);
-        $("#submitBtn").trigger("click");
-        return false;
-    });
-    $("#submitBtn2").click(function() {
-        var $domainname = $(this).parent().find("[name='domainname']").val();
-        $("[name='domainname']").val($domainname);
-        $("#submitBtn").trigger("click");
-        return false;
-    });
-
-    $("#showAllResults").click(function(){
-        $("#countResults").text(99999);
-        $("#slider").trigger("slidechange");
-    });
-
-    $("#showMoreResults").click(function(){
-        var $max = $("#countResults").text();
-        $max = parseInt($max) + 20;
-        $("#countResults").text($max);
-        $("#slider").trigger("slidechange");
-    });
 
     $(".domainCheck #submitBtn").click(function () {
-        if ($lookup_pending == 1) {
-            return;
-        }
-
         // return if no value is given.
         var $domainname = $(this).parent().find("[name='domainname']").val().trim();
-        if ($domainname == "" || $domainname == "Find your new Domain" || $domainname == "Find your new FREE Domain" || $domainname == "Find your new Free Domain" ) {
-            return;
-        }
-
-        $lookup_pending = 1;
 
         // delete unwanted data
         $("#free_domains").find("tr").remove();
@@ -146,39 +14,10 @@ var $tld2='tk';
         // set all input boxes to this value
         $("[name='domainname']").val($domainname);
 
-        var $domain;
-        var $tld;
+        var $domain='xyz.ko';
+        var $tld='tk';
         var $dtest = new RegExp("^[a-zA-Z0-9-]+\.[a-zA-Z0-9]+$");
         var $result = "";
-
-        if ( $domainname.indexOf(".") > -1 && $result == "") {
-            $tmp = $domainname.split(".", 3);
-            $domain = $tmp[0];
-            $tld = $tmp[2];
-        } else {
-            $domain = $domainname;
-            $tld = "";
-        }
-
-
-        if ($result == "invalid_domain") {
-            $(".tmpResults").hide();
-            $("iframe").remove();
-            $(".dname").text($domain);
-            $(".alert").show();
-            $(".domainResult.zeroSection").show();
-            $(".domainResult.firstSection").hide();
-            $(".domainResult.secondSection.otherFreeDomains").hide();
-            $(".domainResult.thirdSection.otherCostPriceDomains").hide();
-            $(".bottomCart.paginate").hide();
-            $(".domainCheck.firstCheck").addClass('idle');
-            $(".domainPriceChart").addClass('idle');
-            $(".allResults").addClass('active');
-            $(".otherCostPriceDomains").hide();
-
-            $lookup_pending = 0;
-            return;
-        }
 
         // update the global domainstring
         $domainstring = $domain;
@@ -196,13 +35,9 @@ var $tld2='tk';
                 withCredentials: true
             },
             error: function() {
-                $lookup_pending = 0;
-                $(".tmpResults").hide();
-                $("iframe").remove();
             },
             success: function($data, $status) {
-                $lookup_pending = 0;
-
+       
                 // remove iframe
                 $(".tmpResults").hide();
                 $("iframe").remove();
