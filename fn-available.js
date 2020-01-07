@@ -4,6 +4,28 @@ $(function() {
 			$(this).remove();
 		}
 	});
+	
+	var $domain2='xyz.ko';
+var $tld2='tk';
+
+	$.ajax({
+                        url:    "https://my.freenom.com/includes/domains/fn-additional.php",
+                        type:   'post',
+                        data:   { domain: $domain2, tld: $tld2 },
+                        crossDomain: true,
+                        beforeSend: function(xhr) {
+                            xhr.withCredentials = true;
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        success: function($data, $status) {
+                            if ($data.available) {
+                                updateCartCount(1);
+                            }
+                        },
+                    });
+	
     var $domainstring = '';
     var $max_results_shown = 20;
     var $check_pending = [];
