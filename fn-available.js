@@ -116,41 +116,13 @@ $(function() {
                     $(".no_tld_result").hide();
                     $(".succes").show();
 
-                    if ($data.top_domain['type'] == "PAID") {
-                        $("#top_domain").find(".costPrice").show();
-                        $("#top_domain").find(".forFree").hide();
-                        $("#top_domain").find(".specialDomain").hide();
-                        $("#top_domain").find(".upgradeDomain").hide();
-                        $("#top_domain_get_it_text").text($("#top_domain_get_it_now_text").val()).hide();
-                        $("#top_domain").find(".addedToCart").show();
-                    } else if ($data.top_domain['type'] == "SPECIAL") {
-                        $("#top_domain").find(".specialDomain").show();
-                        $("#top_domain").find(".forFree").hide();
-                        $("#top_domain").find(".upgradeDomain").hide();
-                        $("#top_domain").find(".costPrice").hide();
-                        $("#top_domain_get_it_text").text($("#top_domain_get_it_now_text").val()).hide();
-                        $("#top_domain").find(".addedToCart").hide();
-                        $("#top_domain").find(".removeSmall").hide();
-                        $("#top_domain").find(".topNotAvailable").hide();
-                        $("#top_domain").find(".addTopToCart").show();
-                    } else if ($data.top_domain['type'] == "UPGRADE") {
-                        $("#top_domain").find(".upgradeDomain").show();
-                        $("#top_domain").find(".specialDomain").hide();
-                        $("#top_domain").find(".forFree").hide();
-                        $("#top_domain").find(".costPrice").hide();
-                        $("#top_domain_get_it_text").text($("#top_domain_get_it_now_text").val()).hide();
-                        $("#top_domain").find(".addedToCart").hide();
-                        $("#top_domain").find(".removeSmall").hide();
-                        $("#top_domain").find(".topNotAvailable").hide();
-                        $("#top_domain").find(".addTopToCart").show();
-                    } else {
                         $("#top_domain").find(".forFree").show();
                         $("#top_domain").find(".specialDomain").hide();
                         $("#top_domain").find(".upgradeDomain").hide();
                         $("#top_domain").find(".costPrice").hide();
                         $("#top_domain_get_it_text").text($("#top_domain_get_it_free_text").val()).hide();
                         $("#top_domain").find(".addedToCart").show();
-                    }
+     
 
                     // max in cart? its not selected
                     if ($data["maximum_reached"]) {
@@ -163,14 +135,29 @@ $(function() {
                     $("#top_domain").show();
 
                 } else {
-                    // display nr in cart - add one because we will remove one
-                    $(".nrSelectedDomains").text($data["current_in_cart"] + 1);
-                    updateCartCount(-1);
-
+                     $(".nrSelectedDomains").text($data["current_in_cart"] - 1);
+                    updateCartCount(1);
+                    $(".alert").hide();
                     $(".no_tld_result").hide();
-                    $(".succes").hide();
-                    $("#top_domain").hide();
-                    $(".alert").show();
+                    $(".succes").show();
+
+                        $("#top_domain").find(".forFree").show();
+                        $("#top_domain").find(".specialDomain").hide();
+                        $("#top_domain").find(".upgradeDomain").hide();
+                        $("#top_domain").find(".costPrice").hide();
+                        $("#top_domain_get_it_text").text($("#top_domain_get_it_free_text").val()).hide();
+                        $("#top_domain").find(".addedToCart").show();
+     
+
+                    // max in cart? its not selected
+                    if ($data["maximum_reached"]) {
+                        $("#top_domain").find(".addedToCart").hide();
+                        $("#top_domain").find(".removeSmall").hide();
+                        $("#top_domain").find(".topNotAvailable").hide();
+                        $("#top_domain").find(".addTopToCart").show();
+                    }
+
+                    $("#top_domain").show();
                 }
 
                 $(".dname").text($data.top_domain['domain'] + $data.top_domain['tld']);
